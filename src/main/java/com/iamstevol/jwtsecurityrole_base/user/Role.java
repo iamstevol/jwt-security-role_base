@@ -1,9 +1,13 @@
 package com.iamstevol.jwtsecurityrole_base.user;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.iamstevol.jwtsecurityrole_base.user.Permission.*;
 
@@ -34,7 +38,12 @@ public enum Role {
             )
     );
 
+    @Getter
     private final Set<Permission> permissions;
 
-    public List<Simple>
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        var authorities = getPermissions()
+                .stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.name())).toList();
+    }
 }
